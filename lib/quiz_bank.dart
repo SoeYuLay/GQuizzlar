@@ -49,6 +49,10 @@ class QuizBank{
     _score ++;
   }
 
+  int getQuestionNumber(){
+    return _questionBank.length-1;
+  }
+
   int getTotalScore(){
     return _score;
   }

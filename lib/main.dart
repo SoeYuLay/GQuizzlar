@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:g_quizzler/quiz_bank.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 
 void main() => runApp(GQuizzlar());
 
@@ -37,16 +38,56 @@ class GQuizPage extends StatefulWidget {
 class _GQuizPageState extends State<GQuizPage> {
   List<Icon> scoreKeeper = [];
 
+  void showGifDialog(String gif,String text1,String text2){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return GiffyDialog.image(
+            Image.asset(gif,
+              height: 200,
+              fit: BoxFit.cover,),
+            title: Text(
+              text1,
+              textAlign: TextAlign.center,
+            ),
+            content: Text(
+              text2,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20.0
+              ),
+            ),
+            actions: [
+              // TextButton(
+              //   onPressed: () => Navigator.pop(context, 'CANCEL'),
+              //   child: const Text('CANCEL'),
+              // ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        }
+    );
+  }
+
   void checkAnswers(bool userPickedAnswer){
     bool correctAnswer = quizBank.getAnswer();
     int score = quizBank.getTotalScore();
     setState(() {
       if(quizBank.isFinished()==true){
-        Alert(
-            context: context,
-            title: 'Finished!',
-            desc: 'You got $score points in this quiz'
-        ).show();
+        // Alert(
+        //     context: context,
+        //     title: 'Finished!',
+        //     desc: 'You got $score points in this quiz',
+        // ).show();
+
+        if(score==quizBank.getQuestionNumber()){
+          showGifDialog('assets/yay.gif','Okay Fine','But Love Me More');
+        }else{
+          showGifDialog('assets/kitten_hitting.gif','You only got $score points!', 'Love Me More.');
+        }
         quizBank.reset();
         scoreKeeper = [];
       }else{
